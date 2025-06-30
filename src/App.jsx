@@ -1,7 +1,6 @@
 import HeroSection from "./sections/HeroSection";
 import ServicesSection from "./sections/ServicesSection";
 import CardsSection from "./sections/CardsSection";
-import Outro from "./sections/Outro";
 
 function App() {
 	return (
@@ -16,7 +15,9 @@ function App() {
 			</section>
 			<ServicesSection />
 			<CardsSection />
-			<Outro />
+			<section className="outro">
+				<h1>It's just the start of the beginning...</h1>
+			</section>
 		</>
 	);
 }
