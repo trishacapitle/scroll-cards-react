@@ -1,4 +1,3 @@
-
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -15,78 +14,74 @@ export default function HeroSection() {
 		gsap.ticker.add((time) => lenis.raf(time * 1000));
 		gsap.ticker.lagSmoothing(0);
 
-			ScrollTrigger.create({
-				trigger: ".hero",
-				start: "top top",
-				end: "75% top",
-				scrub:1,
-				onUpdate: (self) => {
-					const progress = self.progress;
+		ScrollTrigger.create({
+			trigger: ".hero",
+			start: "top top",
+			end: "75% top",
+			scrub: 1,
+			onUpdate: (self) => {
+				const progress = self.progress;
 
-					const heroCardsContainerOpacity = gsap.utils.interpolate(
-						1,
-						0.5,
-						smoothStep(progress)
-					);
-					gsap.set(".hero-cards", { opacity: heroCardsContainerOpacity });
+				const heroCardsContainerOpacity = gsap.utils.interpolate(
+					1,
+					0.5,
+					smoothStep(progress)
+				);
+				gsap.set(".hero-cards", { opacity: heroCardsContainerOpacity });
 
-					["#hero-card-1", "#hero-card-2", "#hero-card-3"].forEach(
-						(cardId, index) => {
-							const delay = index * 0.9;
-							const cardProgress = gsap.utils.clamp(
+				["#hero-card-1", "#hero-card-2", "#hero-card-3"].forEach(
+					(cardId, index) => {
+						const delay = index * 0.9;
+						const cardProgress = gsap.utils.clamp(
+							0,
+							1,
+							(progress - delay * 0.1) / (1 - delay * 0.1)
+						);
+
+						const y = gsap.utils.interpolate(
+							"0%",
+							"250%",
+							smoothStep(cardProgress)
+						);
+
+						const scale = gsap.utils.interpolate(
+							1,
+							0.75,
+							smoothStep(cardProgress)
+						);
+
+						let x = "0%";
+						let rotation = 0;
+						if (index === 0) {
+							x = gsap.utils.interpolate("0%", "90%", smoothStep(cardProgress));
+							rotation = gsap.utils.interpolate(
 								0,
-								1,
-								(progress - delay * 0.1) / (1 - delay * 0.1)
+								-15,
+								smoothStep(cardProgress)
 							);
-
-							const y = gsap.utils.interpolate(
+						} else if (index === 2) {
+							x = gsap.utils.interpolate(
 								"0%",
-								"250%",
+								"-90%",
 								smoothStep(cardProgress)
 							);
-
-							const scale = gsap.utils.interpolate(
-								1,
-								0.75,
+							rotation = gsap.utils.interpolate(
+								0,
+								15,
 								smoothStep(cardProgress)
 							);
-
-							let x = "0%";
-							let rotation = 0;
-							if (index === 0) {
-								x = gsap.utils.interpolate(
-									"0%",
-									"90%",
-									smoothStep(cardProgress)
-								);
-								rotation = gsap.utils.interpolate(
-									0,
-									-15,
-									smoothStep(cardProgress)
-								);
-							} else if (index === 2) {
-								x = gsap.utils.interpolate(
-									"0%",
-									"-90%",
-									smoothStep(cardProgress)
-								);
-								rotation = gsap.utils.interpolate(
-									0,
-									15,
-									smoothStep(cardProgress)
-								);
-							}
-
-							gsap.set(cardId, {
-								y: y,
-								x: x,
-								rotation: rotation,
-								scale: scale,
-							});
 						}
-					);
-				},
-			});
+
+						gsap.set(cardId, {
+							y: y,
+							x: x,
+							rotation: rotation,
+							scale: scale,
+						});
+					}
+				);
+			},
+		});
 	});
 
 	return (

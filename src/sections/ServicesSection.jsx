@@ -1,11 +1,8 @@
-import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 
 export default function ServicesSection() {
-  const ref = useRef();
-  
 	useGSAP(() => {
 		ScrollTrigger.create({
 			trigger: ".services",
@@ -40,13 +37,13 @@ export default function ServicesSection() {
 				});
 			},
 		});
-	}, ref);
+	});
 
 	return (
-		<section className="services" ref={ref}>
+		<section className="services">
 			<div className="services-header">
 				<h1>Smooth animations that feels right</h1>
 			</div>
-			</section>
-		);
-	}
+		</section>
+	);
+}
