@@ -7,21 +7,26 @@ const smoothStep = (p) => p * p * (3 - 2 * p);
 export default function CardsSection() {
 	gsap.registerPlugin(ScrollTrigger);
 
+	// Use GSAP's React integration to set up scroll-based animations
 	useGSAP(() => {
+		// Create a ScrollTrigger instance for the animation
 		ScrollTrigger.create({
-			trigger: ".services",
-			start: "top bottom",
-			end: `+=${window.innerHeight * 4}px`,
-			scrub: 1,
+			trigger: ".services", // Element that triggers the scroll animation
+			start: "top bottom", // Animation starts when .services enters the viewport
+			end: `+=${window.innerHeight * 4}px`, // Animation ends after 4 viewport heights
+			scrub: 1, // Smooth scrubbing
 			onUpdate: (self) => {
-				const progress = self.progress;
-				const hp = gsap.utils.clamp(0, 1, progress / 0.9);
+				const progress = self.progress; // Get scroll progress (0 to 1)
+				const hp = gsap.utils.clamp(0, 1, progress / 0.9); // Clamp progress for header animation
+
+				// Animate the header's vertical position based on scroll
 				gsap.set(".services-header", {
 					y: gsap.utils.interpolate("400%", "0%", smoothStep(hp)),
 				});
 
+				// Animate each card individually
 				["#card-1", "#card-2", "#card-3"].forEach((cardId, index) => {
-					const delay = index * 0.5;
+					const delay = index * 0.5; // Stagger card animations
 					const cardProgress = gsap.utils.clamp(
 						0,
 						1,
@@ -32,6 +37,7 @@ export default function CardsSection() {
 						`${cardId} .flip-card-inner`
 					);
 
+					// Calculate vertical position (y) for the card
 					let y;
 					if (cardProgress < 0.4) {
 						const normalizedProgress = cardProgress / 0.4;
@@ -51,6 +57,7 @@ export default function CardsSection() {
 						y = "0%";
 					}
 
+					// Calculate scale for the card
 					let scale;
 					if (cardProgress < 0.4) {
 						const normalizedProgress = cardProgress / 0.4;
@@ -70,6 +77,7 @@ export default function CardsSection() {
 						scale = 1;
 					}
 
+					// Calculate opacity for the card
 					let opacity;
 					if (cardProgress < 0.2) {
 						const normalizedProgress = cardProgress / 0.2;
@@ -78,6 +86,7 @@ export default function CardsSection() {
 						opacity = 1;
 					}
 
+					// Calculate horizontal position (x), rotation, and Y-axis rotation for the card
 					let x, rotate, rotationY;
 					if (cardProgress < 0.6) {
 						x = index === 0 ? "100%" : index === 1 ? "0%" : "-100%";
@@ -102,6 +111,7 @@ export default function CardsSection() {
 						rotationY = 180;
 					}
 
+					// Apply calculated transforms to the card
 					gsap.set(cardId, {
 						opacity: opacity,
 						y: y,
@@ -110,12 +120,13 @@ export default function CardsSection() {
 						scale: scale,
 					});
 
+					// Apply Y-axis rotation to the inner card for flip effect
 					gsap.set(innerCard, {
 						rotationY: rotationY,
 					});
 				});
 			},
-    });
+		});
 	});
 
 	return (
